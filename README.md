@@ -37,3 +37,28 @@ A simulation of a Large Language Model (LLM) reasoning step. It takes the numeri
 - **Theme**: Dark mode with Emerald (#10b981) and Slate (#1e293b) accents.
 - **Real-time**: Uses Firestore `onSnapshot` (simulated in demo) for zero-refresh updates.
 - **Visuals**: Recharts for occupancy trends and custom CSS for efficiency gauges.
+
+## Run Locally (quick)
+
+Backend (python 3.11+):
+
+- Create venv and activate:
+
+	python -m venv .venv
+	.venv\Scripts\activate
+
+- Install and run:
+
+	pip install -r backend/requirements.txt
+	python -m uvicorn main:app --app-dir backend --reload --port 8000
+
+Frontend (Node.js + npm):
+
+	cd frontend
+	npm install
+	npm start
+
+## Notes
+
+- Large `node_modules` and `frontend/build` paths were purged from history to reduce repository size. A backup tag `pre-purge-backup` was created and pushed.
+
