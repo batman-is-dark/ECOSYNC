@@ -1,0 +1,9 @@
+{
+  "name": "ecosync-firebase-bridge",
+  "version": "1.0.0",
+  "description": "Bridge between ML predictions and Firestore",
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^12.0.0"
+  }
+}
