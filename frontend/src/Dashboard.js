@@ -4,7 +4,7 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart,
 import { ArrowLeft, Leaf, Power, Target, Zap } from 'lucide-react';
 import './app.css';
 
-const API_BASE = 'http://localhost:8000/api';
+const API_BASE = (process.env.REACT_APP_API_URL && process.env.REACT_APP_API_URL.replace(/"/g, '')) || 'http://localhost:8000/api';
 
 const Dashboard = () => {
     const [stats, setStats] = useState({
