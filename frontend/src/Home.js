@@ -15,14 +15,47 @@ const MobileMockup = () => (
     </div>
 
     <div className="map-container">
-      <div className="heatmap-overlay" style={{ top: '30%', left: '20%' }}></div>
-      <div className="heatmap-overlay" style={{ top: '50%', left: '50%', width: '100px', height: '100px' }}></div>
-      
-      <div style={{ position: 'absolute', top: '35%', left: '30%', color: 'white', fontSize: '12px', fontWeight: 'bold', textShadow: '0 0 10px black' }}>
-        Quiet Zone
+      {/* inline SVG floorplan (blueprint) */}
+      <svg className="floorplan-svg" viewBox="0 0 320 640" preserveAspectRatio="xMidYMid slice">
+        {/* rooms: x, y, width, height */}
+        <rect className="room room-quiet fill-quiet" x="18" y="68" width="120" height="90" rx="6" />
+        <text className="room-label" x="28" y="98">Study Room A</text>
+
+        <rect className="room room-active fill-active" x="160" y="52" width="140" height="120" rx="6" />
+        <text className="room-label" x="170" y="82">Lecture Hall</text>
+
+        <rect className="room room-busy fill-busy" x="40" y="220" width="240" height="140" rx="6" />
+        <text className="room-label" x="50" y="250">Student Center / Cafe</text>
+
+        <rect className="room room-quiet" x="18" y="380" width="90" height="110" rx="6" />
+        <text className="room-label" x="24" y="410">Library Nook</text>
+      </svg>
+
+      {/* heatmap zones aligned to rooms */}
+      <div className="heatmap-zone heatmap-quiet" style={{ top: '26%', left: '14%' }}></div>
+      <div className="heatmap-zone heatmap-active" style={{ top: '10%', left: '52%' }}></div>
+      <div className="heatmap-zone heatmap-busy" style={{ top: '36%', left: '28%' }}></div>
+
+      {/* markers anchored to rooms */}
+      <div className="map-marker" style={{ top: '34%', left: '22%' }}>
+        <div className="marker-dot" style={{ background: 'linear-gradient(90deg,#00ffa3,#00d2ff)' }}></div>
+        <div className="marker-label">Study Room A — 3 ppl</div>
       </div>
-       <div style={{ position: 'absolute', top: '55%', left: '55%', color: 'white', fontSize: '12px', fontWeight: 'bold', textShadow: '0 0 10px black' }}>
-        Active Zone
+      <div className="map-marker" style={{ top: '22%', left: '62%' }}>
+        <div className="marker-dot" style={{ background: 'linear-gradient(90deg,#00d2ff,#00aaff)' }}></div>
+        <div className="marker-label">Lecture Hall — 12 ppl</div>
+      </div>
+      <div className="map-marker" style={{ top: '46%', left: '36%' }}>
+        <div className="marker-dot" style={{ background: 'linear-gradient(90deg,#bd00ff,#ff4da6)' }}></div>
+        <div className="marker-label">Cafe — 28 ppl</div>
+      </div>
+
+      {/* legend */}
+      <div className="map-legend">
+        <div style={{ fontWeight: 700, color: 'var(--text-main)', marginBottom: 6 }}>Zones</div>
+        <div className="legend-row"><div className="legend-swatch legend-quiet" /> Quiet</div>
+        <div className="legend-row"><div className="legend-swatch legend-active" /> Active</div>
+        <div className="legend-row"><div className="legend-swatch legend-busy" /> High Activity</div>
       </div>
     </div>
 

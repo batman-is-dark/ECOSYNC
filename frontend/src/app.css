@@ -207,6 +207,108 @@ input:checked + .slider:before {
   100% { transform: scale(1); opacity: 0.3; }
 }
 
+/* Enhanced heatmap zones and markers */
+.heatmap-zone {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(12px);
+  opacity: 0.85;
+  transform-origin: center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.heatmap-quiet {
+  width: 110px; height: 110px;
+  background: radial-gradient(circle, rgba(0,255,163,0.28) 0%, rgba(0,255,163,0.06) 35%, transparent 60%);
+}
+
+.heatmap-active {
+  width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(0,210,255,0.26) 0%, rgba(0,210,255,0.06) 45%, transparent 70%);
+  filter: blur(16px);
+}
+
+.heatmap-busy {
+  width: 220px; height: 220px;
+  background: radial-gradient(circle, rgba(189,0,255,0.22) 0%, rgba(189,0,255,0.05) 55%, transparent 85%);
+  filter: blur(20px);
+  opacity: 0.95;
+}
+
+.map-marker {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.marker-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  box-shadow: 0 0 18px rgba(0,0,0,0.6);
+  position: relative;
+}
+
+.marker-dot::after {
+  content: '';
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 12px; height: 12px; border-radius: 50%;
+  background: inherit; filter: blur(6px); opacity: 0.7;
+  animation: markerPulse 2.8s infinite;
+}
+
+.marker-label {
+  background: rgba(0,0,0,0.45);
+  padding: 6px 8px; border-radius: 8px;
+  font-size: 12px; color: var(--text-main);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+}
+
+@keyframes markerPulse {
+  0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
+  50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.95; }
+  100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
+}
+
+.map-legend {
+  position: absolute; right: 12px; top: 12px;
+  background: rgba(10,12,12,0.6); padding: 10px 12px; border-radius: 12px;
+  backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,0.04);
+  font-size: 12px; color: var(--text-muted);
+}
+.legend-row { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.legend-swatch { width:14px; height:14px; border-radius:4px; }
+.legend-quiet { background: linear-gradient(90deg, rgba(0,255,163,0.6), rgba(0,255,163,0.2)); }
+.legend-active { background: linear-gradient(90deg, rgba(0,210,255,0.6), rgba(0,210,255,0.2)); }
+.legend-busy { background: linear-gradient(90deg, rgba(189,0,255,0.6), rgba(189,0,255,0.2)); }
+
+/* Blueprint floorplan styles */
+.floorplan-svg {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; overflow: visible;
+}
+.room {
+  fill: transparent; stroke: rgba(200,220,255,0.12); stroke-width: 1.8; rx: 4; ry: 4;
+  transition: fill 0.25s ease, stroke 0.25s ease, transform 0.25s ease;
+}
+.room-label { fill: var(--text-main); font-size: 10px; font-family: var(--font-sans); opacity: 0.95; }
+.room-quiet { stroke: rgba(0,255,163,0.25); }
+.room-active { stroke: rgba(0,210,255,0.22); }
+.room-busy { stroke: rgba(189,0,255,0.22); }
+.room.fill-quiet { fill: rgba(0,255,163,0.06); }
+.room.fill-active { fill: rgba(0,210,255,0.06); }
+.room.fill-busy { fill: rgba(189,0,255,0.06); }
+
+/* small blueprint grid overlay */
+.map-container::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.06;
+  pointer-events: none;
+}
+
 /* Buttons */
 .btn-cyber {
   background: transparent;
