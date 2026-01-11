@@ -6,6 +6,7 @@ import joblib
 import os
 from datetime import datetime, timedelta
 import time
+from reasoning_layer import get_real_gemini_insight
 
 app = FastAPI(title="EcoSync AI Pipeline API")
 
@@ -72,7 +73,9 @@ def update_pipeline():
             STATE["carbon_saved_kg"] = carbon
             STATE["efficiency"] = 90 if eco_mode else 75
             STATE["last_update"] = datetime.now().isoformat()
-            STATE["gemini_insight"] = np.random.choice(gemini_insights)
+            
+            # Fetch real Gemini insight
+            STATE["gemini_insight"] = get_real_gemini_insight(actual, pred0)
             
             new_entry = {
                 "time": datetime.now().strftime("%H:%M"),

@@ -12,7 +12,7 @@ EcoSync AI is a predictive system designed to optimize campus energy consumption
 ## Tech Stack
 
 ### AI & Data Science
-- **Google Gemini**: Strategic reasoning agent for energy optimization advice.
+- **Google Gemini 1.5 Flash**: Real-time strategic reasoning agent integrated via API for dynamic energy optimization advice.
 - **Scikit-Learn/Pandas**: Data preprocessing and simulation.
 - **LSTM (PyTorch/TF Concept)**: Predictive occupancy modeling.
 

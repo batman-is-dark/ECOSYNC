@@ -1,6 +1,44 @@
+import google.generativeai as genai
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+def get_real_gemini_insight(actual, predicted, strategy_active=False):
+    """
+    Calls the actual Gemini API to generate strategic energy insights.
+    """
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        return "Gemini API Key missing. Please check your .env file."
+        
+    genai.configure(api_key=api_key)
+    
+    # Using gemini-1.5-flash for speed/cost balance
+    model = genai.GenerativeModel('gemini-1.5-flash')
+    
+    prompt = f"""
+    You are the EcoSync AI Strategic Advisor. 
+    Current Campus Data:
+    - Actual Occupancy: {actual}
+    - Predicted Occupancy: {predicted}
+    - Strategy Applied: {strategy_active}
+    
+    Provide a concise, 1-sentence professional insight or recommendation for campus energy management.
+    Focus on sustainability, cost, or grid stability.
+    Do not use markdown. Just the sentence.
+    """
+    
+    try:
+        response = model.generate_content(prompt)
+        return response.text.strip()
+    except Exception as e:
+        print(f"Gemini API Error: {e}")
+        return "Strategic analyzer offline. Using local predictive logic."
+
 def simulate_gemini_reasoning(prediction, context_string):
     """
-    Simulates a Gemini 1.5 Pro Reasoning Layer.
+    Simulates a Gemini 2.5 Pro Reasoning Layer.
     Adjusts the occupancy forecast based on external context.
     """
     print(f"Original Prediction: {prediction}")
