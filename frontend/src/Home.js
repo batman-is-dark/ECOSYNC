@@ -6,6 +6,11 @@ import './app.css';
 const MobileMockup = () => {
   const [activeTab, setActiveTab] = useState('map');
   const [selectedRoom, setSelectedRoom] = useState(null);
+  
+  // Dragging state
+  const [mapPos, setMapPos] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
   const rooms = [
     { id: 'study_a', name: 'Study Room A', ppl: 3, zone: 'quiet', x: 18, y: 68, w: 120, h: 90 },
@@ -13,28 +18,72 @@ const MobileMockup = () => {
     { id: 'cafe', name: 'Student Center', ppl: 28, zone: 'busy', x: 40, y: 220, w: 240, h: 140 },
   ];
 
+  const handleDragDown = (e) => {
+    setIsDragging(true);
+    const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+    const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+    setDragStart({ x: clientX - mapPos.x, y: clientY - mapPos.y });
+  };
+
+  const handleDragMove = (e) => {
+    if (!isDragging) return;
+    const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+    const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+    setMapPos({
+      x: clientX - dragStart.x,
+      y: clientY - dragStart.y
+    });
+  };
+
+  const handleDragUp = () => setIsDragging(false);
+
   const renderContent = () => {
     switch (activeTab) {
       case 'map':
         return (
-          <div className="map-container">
-            <svg className="floorplan-svg" viewBox="0 0 320 640" preserveAspectRatio="xMidYMid slice">
-              {rooms.map(room => (
-                <rect 
-                  key={room.id}
-                  className={`room room-${room.zone} fill-${room.zone} room-interactive`} 
-                  x={room.x} y={room.y} width={room.w} height={room.h} rx="6" 
-                  onClick={() => setSelectedRoom(room)}
-                />
-              ))}
-              {rooms.map(room => (
-                <text key={`lbl-${room.id}`} className="room-label" x={room.x + 10} y={room.y + 30}>{room.name}</text>
-              ))}
-            </svg>
+          <div className="map-container" 
+            onMouseDown={handleDragDown}
+            onMouseMove={handleDragMove}
+            onMouseUp={handleDragUp}
+            onMouseLeave={handleDragUp}
+            onTouchStart={handleDragDown}
+            onTouchMove={handleDragMove}
+            onTouchEnd={handleDragUp}
+            style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+          >
+            <div style={{ 
+              transform: `translate(${mapPos.x}px, ${mapPos.y}px)`, 
+              transition: isDragging ? 'none' : 'transform 0.1s ease-out',
+              width: '100%', height: '100%'
+            }}>
+                <svg className="floorplan-svg" viewBox="0 0 320 640" preserveAspectRatio="xMidYMid slice">
+                {rooms.map(room => (
+                    <rect 
+                    key={room.id}
+                    className={`room room-${room.zone} fill-${room.zone} room-interactive`} 
+                    x={room.x} y={room.y} width={room.w} height={room.h} rx="6" 
+                    onClick={() => setSelectedRoom(room)}
+                    />
+                ))}
+                {rooms.map(room => (
+                    <text key={`lbl-${room.id}`} className="room-label" x={room.x + 10} y={room.y + 30}>{room.name}</text>
+                ))}
+                </svg>
 
-            <div className="heatmap-zone heatmap-quiet" style={{ top: '26%', left: '14%' }}></div>
-            <div className="heatmap-zone heatmap-active" style={{ top: '10%', left: '52%' }}></div>
-            <div className="heatmap-zone heatmap-busy" style={{ top: '36%', left: '28%' }}></div>
+                <div className="heatmap-zone heatmap-quiet" style={{ top: '26%', left: '14%' }}></div>
+                <div className="heatmap-zone heatmap-active" style={{ top: '10%', left: '52%' }}></div>
+                <div className="heatmap-zone heatmap-busy" style={{ top: '36%', left: '28%' }}></div>
+
+                {/* GUI Markers */}
+                <div className="map-marker" style={{ top: '34%', left: '22%' }}>
+                    <div className="marker-dot" style={{ background: 'linear-gradient(90deg,#00ffa3,#00d2ff)' }}></div>
+                    <div className="marker-label">3 Open Seats</div>
+                </div>
+                <div className="map-marker" style={{ top: '22%', left: '62%' }}>
+                    <div className="marker-dot" style={{ background: 'linear-gradient(90deg,#00d2ff,#00aaff)' }}></div>
+                    <div className="marker-label">Active Hub</div>
+                </div>
+            </div>
 
             {selectedRoom && (
               <div className="map-overlay-pop">
