@@ -99,33 +99,23 @@ const Home = () => {
           <div className="mono" style={{ color: 'var(--neon-mint)', marginBottom: '16px' }}>
             // SMART CAMPUS SOLUTION
           </div>
-          <h2 style={{ fontSize: '48px', lineHeight: 1.1, marginBottom: '24px' }}>
-            The Pulse of <br />
-            <span className="text-gradient">Green Energy</span>
+          <h2 style={{ fontSize: '56px', lineHeight: 1, marginBottom: '24px', fontWeight: 800 }}>
+            Unified <br />
+            <span className="text-gradient">Campus Energy</span>
           </h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '18px', lineHeight: 1.6, marginBottom: '32px' }}>
-            EcoSync AI bridges the gap between campus life and sustainability. 
-            Real-time occupancy mapping helps students find quiet spaces while 
-            automatically optimizing energy consumption across the entire university.
+          <p style={{ color: 'var(--text-muted)', fontSize: '19px', lineHeight: 1.5, marginBottom: '40px', maxWidth: '540px' }}>
+            EcoSync AI orchestrates university infrastructure by synchronizing 
+            occupancy intelligence with building automation to drive radical sustainability.
           </p>
           <div style={{ display: 'flex', gap: '20px' }}>
-             <div className="glass-panel" style={{ padding: '20px', flex: 1 }}>
-                <h4 style={{ margin: '0 0 8px 0', color: 'var(--neon-mint)' }}>Vertex AI Driven</h4>
-                <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-muted)' }}>94% predictive accuracy using custom Vertex AI models.</p>
+             <div className="glass-panel" style={{ padding: '20px', flex: 1, borderLeft: '3px solid var(--neon-mint)' }}>
+                <h4 style={{ margin: '0 0 8px 0', color: 'var(--neon-mint)' }}>Predictive Efficiency</h4>
+                <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-muted)' }}>Automated occupancy-based HVAC & lighting control.</p>
              </div>
-             <div className="glass-panel" style={{ padding: '20px', flex: 1 }}>
-                <h4 style={{ margin: '0 0 8px 0', color: 'var(--neon-blue)' }}>Gemini Intelligence</h4>
-                <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-muted)' }}>Real-time reasoning over unstructured campus data.</p>
+             <div className="glass-panel" style={{ padding: '20px', flex: 1, borderLeft: '3px solid var(--neon-blue)' }}>
+                <h4 style={{ margin: '0 0 8px 0', color: 'var(--neon-blue)' }}>Strategic Insights</h4>
+                <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-muted)' }}>Gemini-powered reasoning over schedule and WiFi data.</p>
              </div>
-          </div>
-          
-          <div style={{ marginTop: '30px', display: 'flex', alignItems: 'center', gap: '15px' }}>
-            <span style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Powered by:</span>
-            <div style={{ display: 'flex', gap: '15px' }}>
-              <span className="mono" style={{ fontSize: '11px', background: 'rgba(255,255,255,0.05)', padding: '4px 8px', borderRadius: '4px' }}>BigQuery</span>
-              <span className="mono" style={{ fontSize: '11px', background: 'rgba(255,255,255,0.05)', padding: '4px 8px', borderRadius: '4px' }}>Flutter</span>
-              <span className="mono" style={{ fontSize: '11px', background: 'rgba(255,255,255,0.05)', padding: '4px 8px', borderRadius: '4px' }}>Google Cloud</span>
-            </div>
           </div>
         </div>
 

@@ -27,9 +27,7 @@ STATE = {
     "history": [],
     "ai_override": False,
     "last_update": None,
-    "gemini_insight": "Initializing Gemini 2.5 Pro reasoning...",
-    "vertex_model_status": "Healthy",
-    "bigquery_sync": "Active"
+    "gemini_insight": "Strategic advisor analyzing occupancy..."
 }
 # Track simulated devices and events
 STATE["devices"] = {
@@ -45,11 +43,11 @@ MODEL_PATH = "occupancy_model.pkl"
 def update_pipeline():
     """Background task to simulate the ML pipeline processing."""
     gemini_insights = [
-        "Gemini: Predicted occupancy shift in North Wing due to scheduled Seminar Room 3B event.",
-        "Gemini: Recommending early HVAC pre-cooling based on unpredicted solar gain patterns.",
-        "Gemini: Correlating WiFi logs with Exam Schedule — High activity expected in Main Hall.",
-        "Gemini: Optimized energy distribution across Classrooms A-D after anomaly detection.",
-        "Gemini: Unstructured data scan (Public Holiday) completed. Adjusting predictions."
+        "Predicted occupancy shift in North Wing based on library study patterns.",
+        "Recommend optimization of HVAC setpoints in Admin wing for low-occupancy window.",
+        "WiFi load balancing suggests high activity migrating to Main Hall classrooms.",
+        "Schedule correlation: Energy efficiency can be improved by 12% in Zone B tonight.",
+        "Predictive cooling active: Pre-cooling classrooms for 14:00 peak occupancy."
     ]
     
     while True:
@@ -57,15 +55,11 @@ def update_pipeline():
             # 1. Ingest 'Sensor' Data (Simulated)
             actual = np.random.randint(50, 250)
             
-            # 2. Run Inference (Vertex AI Mock)
-            if os.path.exists(MODEL_PATH):
-                # Simulated Vertex AI Endpoint Call
-                pred0 = int(actual + np.random.normal(0, 15))
-                pred1 = int(pred0 + np.random.normal(0, 10))
-            else:
-                pred0, pred1 = actual + 10, actual + 15
+            # 2. Run Inference
+            pred0 = int(actual + np.random.normal(0, 15))
+            pred1 = int(pred0 + np.random.normal(0, 10))
 
-            # 3. SMART Logic Triggers
+            # 3. Logic Triggers
             eco_mode = pred0 < 100
             baseline_kw = actual * 0.6
             optimized_kw = pred0 * 0.45 if eco_mode else baseline_kw
@@ -87,13 +81,16 @@ def update_pipeline():
             }
             STATE["history"] = (STATE["history"] + [new_entry])[-30:]
             
-            # Simulated BigQuery Telemetry Sink
-            if np.random.random() > 0.7:
+            # Record significant events
+            if eco_mode and not STATE.get("last_eco_notified", False):
                 ev = {
                     "time": datetime.now().strftime("%H:%M:%S"),
-                    "event": "Google Cloud BigQuery: Telemetry batch synced successfully."
+                    "event": "Eco-Mode transition: Energy strategy optimized for low occupancy."
                 }
                 STATE.setdefault("events", [])[:] = (STATE.get("events", []) + [ev])[-50:]
+                STATE["last_eco_notified"] = True
+            elif not eco_mode:
+                STATE["last_eco_notified"] = False
 
         time.sleep(10) # Pipeline runs every 10 seconds
 

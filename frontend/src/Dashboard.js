@@ -14,15 +14,12 @@ const Dashboard = () => {
         carbon_saved_kg: 0,
         history: [],
         ai_override: false,
-        gemini_insight: "Waiting for Gemini reasoning...",
-        vertex_model_status: "Initializing",
-        bigquery_sync: "Standby"
+        gemini_insight: "Analyzing campus patterns..."
     });
 
     const [logs, setLogs] = useState([
-        { id: 1, time: '14:20:01', msg: 'System initialized. Connecting to Google Vertex AI Endpoint...' },
-        { id: 2, time: '14:20:05', msg: 'Gemini 2.5 Pro multimodal reasoner online.' },
-        { id: 3, time: '14:20:10', msg: 'Google Cloud BigQuery telemetry stream: [CONNECTED]' }
+        { id: 1, time: '14:20:00', msg: 'Core AI Engine: ONLINE' },
+        { id: 3, time: '14:20:05', msg: 'Campus Network telemetry stream sync successful.' }
     ]);
 
     const [toggles, setToggles] = useState({
@@ -97,34 +94,43 @@ const Dashboard = () => {
                 </Link>
                 <div style={{ display: 'flex', gap: '20px' }}>
                     <div className="mono" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                        VERTEX AI: <span style={{ color: 'var(--neon-mint)' }}>HEALTHY</span>
-                    </div>
-                    <div className="mono" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                        BIGQUERY SYNC: <span style={{ color: 'var(--neon-blue)' }}>ACTIVE</span>
+                        SYSTEM STATUS: <span style={{ color: 'var(--neon-mint)' }}>OPTIMAL</span>
                     </div>
                 </div>
             </nav>
 
-            <div className="glass-panel admin-card">
-                <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div className="glass-panel admin-card" style={{ maxWidth: '1200px' }}>
+                <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <Leaf size={24} color="var(--neon-mint)" />
-                        <h2 style={{ margin: 0 }}>Advanced Energy Console</h2>
+                        <h2 style={{ margin: 0, fontWeight: 700 }}>Energy Intelligence Center</h2>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                       <div className="mono" style={{ color: 'var(--neon-mint)', fontSize: '10px', background: 'rgba(0, 255, 163, 0.05)', padding: '4px 10px', borderRadius: '4px', border: '1px solid rgba(0, 255, 163, 0.2)' }}>
-                          Gemini 2.5 Pro Multimodal Reasoning Enabled
-                       </div>
+                    <div className="mono" style={{ color: 'var(--text-muted)', fontSize: '10px' }}>
+                       PRO_ACCESS: CAMPUS_MAIN_01
                     </div>
                 </header>
 
-                {/* Gemini Insight Banner */}
-                <div className="glass-panel" style={{ margin: '20px 0', padding: '16px 20px', borderLeft: '4px solid var(--neon-purple)', background: 'linear-gradient(90deg, rgba(189,0,255,0.05) 0%, transparent 100%)' }}>
-                    <div className="mono" style={{ fontSize: '10px', color: 'var(--neon-purple)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <Zap size={10} /> GEMINI AI CONTEXTUAL INSIGHT
+                {/* Gemini Insight Banner - Integrated as Advisor */}
+                <div style={{ 
+                    margin: '20px 0', 
+                    padding: '20px', 
+                    borderRadius: '16px',
+                    border: '1px solid rgba(189,0,255,0.2)', 
+                    background: 'linear-gradient(135deg, rgba(189,0,255,0.08) 0%, rgba(20,25,25,0.5) 100%)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '20px'
+                }}>
+                    <div style={{ background: 'var(--neon-purple)', padding: '10px', borderRadius: '12px', color: 'white' }}>
+                        <Zap size={24} />
                     </div>
-                    <div style={{ fontSize: '15px', color: 'var(--text-main)', fontStyle: 'italic' }}>
-                        "{stats.gemini_insight}"
+                    <div>
+                        <div className="mono" style={{ fontSize: '10px', color: 'var(--neon-purple)', marginBottom: '4px', fontWeight: 600 }}>
+                            AI STRATEGIC ADVISOR (GEMINI)
+                        </div>
+                        <div style={{ fontSize: '15px', color: 'var(--text-main)', fontStyle: 'italic', opacity: 0.9 }}>
+                            "{stats.gemini_insight}"
+                        </div>
                     </div>
                 </div>
 
