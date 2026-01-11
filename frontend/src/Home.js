@@ -1,85 +1,135 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Map as MapIcon, Calendar, User, Layout, Leaf } from 'lucide-react';
+import { Map as MapIcon, Calendar, User, Layout, Leaf, Clock, TrendingUp, Award } from 'lucide-react';
 import './app.css';
 
-const MobileMockup = () => (
-  <div className="mobile-view">
-    <div style={{ padding: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-      <Leaf size={20} color="var(--neon-mint)" />
-      <span style={{ fontWeight: 800, fontSize: '18px' }}>EcoSync AI</span>
+const MobileMockup = () => {
+  const [activeTab, setActiveTab] = useState('map');
+  const [selectedRoom, setSelectedRoom] = useState(null);
+
+  const rooms = [
+    { id: 'study_a', name: 'Study Room A', ppl: 3, zone: 'quiet', x: 18, y: 68, w: 120, h: 90 },
+    { id: 'lecture', name: 'Lecture Hall', ppl: 12, zone: 'active', x: 160, y: 52, w: 140, h: 120 },
+    { id: 'cafe', name: 'Student Center', ppl: 28, zone: 'busy', x: 40, y: 220, w: 240, h: 140 },
+  ];
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'map':
+        return (
+          <div className="map-container">
+            <svg className="floorplan-svg" viewBox="0 0 320 640" preserveAspectRatio="xMidYMid slice">
+              {rooms.map(room => (
+                <rect 
+                  key={room.id}
+                  className={`room room-${room.zone} fill-${room.zone} room-interactive`} 
+                  x={room.x} y={room.y} width={room.w} height={room.h} rx="6" 
+                  onClick={() => setSelectedRoom(room)}
+                />
+              ))}
+              {rooms.map(room => (
+                <text key={`lbl-${room.id}`} className="room-label" x={room.x + 10} y={room.y + 30}>{room.name}</text>
+              ))}
+            </svg>
+
+            <div className="heatmap-zone heatmap-quiet" style={{ top: '26%', left: '14%' }}></div>
+            <div className="heatmap-zone heatmap-active" style={{ top: '10%', left: '52%' }}></div>
+            <div className="heatmap-zone heatmap-busy" style={{ top: '36%', left: '28%' }}></div>
+
+            {selectedRoom && (
+              <div className="map-overlay-pop">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <h4 style={{ margin: 0 }}>{selectedRoom.name}</h4>
+                  <button onClick={() => setSelectedRoom(null)} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}>✕</button>
+                </div>
+                <div className="mono" style={{ fontSize: '12px', color: 'var(--neon-mint)' }}>
+                  {selectedRoom.ppl} Students Present
+                </div>
+                <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                  Energy optimization active. HVAC at 22°C.
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      case 'schedule':
+        return (
+          <div style={{ padding: '20px' }}>
+            <h3 style={{ marginBottom: '20px' }}>My Schedule</h3>
+            <div className="schedule-item">
+              <div>
+                <div style={{ fontWeight: 600 }}>Advanced Calculus</div>
+                <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>10:00 - 11:30 | Room 204</div>
+              </div>
+              <div style={{ color: 'var(--neon-mint)', fontSize: '10px' }} className="mono">ECO-SYNCED</div>
+            </div>
+            <div className="schedule-item" style={{ borderLeft: '3px solid var(--neon-mint)' }}>
+              <div>
+                <div style={{ fontWeight: 600 }}>Study Session</div>
+                <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>14:00 - 16:00 | Library Nook</div>
+              </div>
+              <div style={{ color: 'var(--neon-mint)', fontSize: '10px' }} className="mono">LOW OCCUPANCY</div>
+            </div>
+          </div>
+        );
+      case 'profile':
+        return (
+          <div style={{ padding: '20px' }}>
+            <div className="profile-stat-card">
+              <div style={{ background: 'rgba(0,255,163,0.1)', width: '60px', height: '60px', borderRadius: '50%', display: 'grid', placeItems: 'center', margin: '0 auto 15px' }}>
+                <Award size={32} color="var(--neon-mint)" />
+              </div>
+              <h2 style={{ margin: '0 0 5px 0' }}>Eco-Warrior</h2>
+              <div className="mono" style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Level 12 Sustainability Lead</div>
+            </div>
+            
+            <div style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              <div className="glass-panel" style={{ padding: '15px', textAlign: 'center' }}>
+                <TrendingUp size={20} color="var(--neon-blue)" />
+                <div style={{ fontSize: '18px', fontWeight: 700, margin: '5px 0' }}>42kg</div>
+                <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Carbon Offset</div>
+              </div>
+              <div className="glass-panel" style={{ padding: '15px', textAlign: 'center' }}>
+                <Clock size={20} color="var(--neon-mint)" />
+                <div style={{ fontSize: '18px', fontWeight: 700, margin: '5px 0' }}>128h</div>
+                <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Smart Study</div>
+              </div>
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="mobile-view">
+      <div style={{ padding: '20px', display: 'flex', alignItems: 'center', gap: '8px', zIndex: 10 }}>
+        <Leaf size={20} color="var(--neon-mint)" />
+        <span style={{ fontWeight: 800, fontSize: '18px' }}>EcoSync</span>
+      </div>
+      
+      <div className="mobile-content">
+        {renderContent()}
+      </div>
+
+      <div className="tab-nav">
+        <div className={`tab-item ${activeTab === 'map' ? 'active' : ''}`} onClick={() => setActiveTab('map')}>
+          <MapIcon size={20} />
+          <span style={{ fontSize: '10px', marginTop: '4px' }}>Map</span>
+        </div>
+        <div className={`tab-item ${activeTab === 'schedule' ? 'active' : ''}`} onClick={() => setActiveTab('schedule')}>
+          <Calendar size={20} />
+          <span style={{ fontSize: '10px', marginTop: '4px' }}>Schedule</span>
+        </div>
+        <div className={`tab-item ${activeTab === 'profile' ? 'active' : ''}`} onClick={() => setActiveTab('profile')}>
+          <User size={20} />
+          <span style={{ fontSize: '10px', marginTop: '4px' }}>Profile</span>
+        </div>
+      </div>
     </div>
-    
-    <div style={{ padding: '0 20px', marginBottom: '20px' }}>
-      <h2 style={{ fontSize: '24px', margin: 0 }}>Student Study Map</h2>
-    </div>
-
-    <div className="map-container">
-      {/* inline SVG floorplan (blueprint) */}
-      <svg className="floorplan-svg" viewBox="0 0 320 640" preserveAspectRatio="xMidYMid slice">
-        {/* rooms: x, y, width, height */}
-        <rect className="room room-quiet fill-quiet" x="18" y="68" width="120" height="90" rx="6" />
-        <text className="room-label" x="28" y="98">Study Room A</text>
-
-        <rect className="room room-active fill-active" x="160" y="52" width="140" height="120" rx="6" />
-        <text className="room-label" x="170" y="82">Lecture Hall</text>
-
-        <rect className="room room-busy fill-busy" x="40" y="220" width="240" height="140" rx="6" />
-        <text className="room-label" x="50" y="250">Student Center / Cafe</text>
-
-        <rect className="room room-quiet" x="18" y="380" width="90" height="110" rx="6" />
-        <text className="room-label" x="24" y="410">Library Nook</text>
-      </svg>
-
-      {/* heatmap zones aligned to rooms */}
-      <div className="heatmap-zone heatmap-quiet" style={{ top: '26%', left: '14%' }}></div>
-      <div className="heatmap-zone heatmap-active" style={{ top: '10%', left: '52%' }}></div>
-      <div className="heatmap-zone heatmap-busy" style={{ top: '36%', left: '28%' }}></div>
-
-      {/* markers anchored to rooms */}
-      <div className="map-marker" style={{ top: '34%', left: '22%' }}>
-        <div className="marker-dot" style={{ background: 'linear-gradient(90deg,#00ffa3,#00d2ff)' }}></div>
-        <div className="marker-label">Study Room A — 3 ppl</div>
-      </div>
-      <div className="map-marker" style={{ top: '22%', left: '62%' }}>
-        <div className="marker-dot" style={{ background: 'linear-gradient(90deg,#00d2ff,#00aaff)' }}></div>
-        <div className="marker-label">Lecture Hall — 12 ppl</div>
-      </div>
-      <div className="map-marker" style={{ top: '46%', left: '36%' }}>
-        <div className="marker-dot" style={{ background: 'linear-gradient(90deg,#bd00ff,#ff4da6)' }}></div>
-        <div className="marker-label">Cafe — 28 ppl</div>
-      </div>
-
-      {/* legend */}
-      <div className="map-legend">
-        <div style={{ fontWeight: 700, color: 'var(--text-main)', marginBottom: 6 }}>Zones</div>
-        <div className="legend-row"><div className="legend-swatch legend-quiet" /> Quiet</div>
-        <div className="legend-row"><div className="legend-swatch legend-active" /> Active</div>
-        <div className="legend-row"><div className="legend-swatch legend-busy" /> High Activity</div>
-      </div>
-    </div>
-
-    <div style={{ 
-      position: 'absolute', bottom: 0, width: '100%', 
-      display: 'flex', justifyContent: 'space-around', 
-      padding: '20px 0', background: 'rgba(15,23,23,0.95)',
-      borderTop: '1px solid rgba(255,255,255,0.05)'
-    }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', color: 'var(--neon-mint)' }}>
-        <MapIcon size={20} />
-        <span style={{ fontSize: '10px', marginTop: '4px' }}>Map</span>
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', color: 'var(--text-muted)' }}>
-        <Calendar size={20} />
-        <span style={{ fontSize: '10px', marginTop: '4px' }}>Schedule</span>
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', color: 'var(--text-muted)' }}>
-        <User size={20} />
-        <span style={{ fontSize: '10px', marginTop: '4px' }}>Profile</span>
-      </div>
-    </div>
-  </div>
-);
+  );
+};
 
 const Home = () => {
   return (
