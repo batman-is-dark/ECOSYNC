@@ -4,20 +4,23 @@ EcoSync AI is a predictive system designed to optimize campus energy consumption
 
 ## Project Structure
 
-- `/backend`: Python scripts for data generation, LSTM model training, and Gemini Reasoning Layer simulation.
-- `/firebase-bridge`: Node.js script using Firebase Admin SDK to push predictions to Firestore.
-- `/frontend`: React-based dashboard for facility managers with real-time updates.
+- `/backend`: FastAPI server implementing the Gemini Reasoning Layer, LSTM occupancy forecasting, and real-time telemetry.
+- `/frontend`: React dashboard featuring a professional dark glassmorphism UI, Gemini insights, and an interactive student mobile mockup.
+- `/mobile`: **Flutter Cross-Platform Application** for students and staff, providing navigation maps, facility updates, and profile management.
+- `/firebase-bridge`: Legacy Node.js bridge for Firestore synchronization.
 
-## Data Science Methodology
+## Tech Stack
 
-### 1. Data Ingestion & Synthetic Generation
-We generate a synthetic dataset (`campus_data.csv`) that simulates real-world campus dynamics:
-- **WiFi Density**: High correlation with actual occupancy.
-- **Class Schedules**: Provides a baseline for expected occupancy.
-- **Ambient Temperature**: Influences HVAC energy consumption.
+### AI & Data Science
+- **Google Gemini**: Strategic reasoning agent for energy optimization advice.
+- **Scikit-Learn/Pandas**: Data preprocessing and simulation.
+- **LSTM (PyTorch/TF Concept)**: Predictive occupancy modeling.
 
-### 2. Predictive Modeling (LSTM)
-We use a **Long Short-Term Memory (LSTM)** network, a type of Recurrent Neural Network (RNN) capable of learning long-term dependencies in time-series data.
+### Implementation
+- **Cloud Hosting**: Render/Vercel.
+- **Frontend**: React 18, Recharts, Lucide-React.
+- **Backend**: Python 3.10+, FastAPI, Uvicorn.
+- **Mobile**: Flutter (Dart) with Material 3.
 - **Input**: 24-hour window of WiFi counts, class sizes, and temperature.
 - **Output**: Predicted occupancy for the next 2 hours.
 - **Architecture**: Two LSTM layers with Dropout for regularization, followed by a Dense output layer.

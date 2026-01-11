@@ -207,19 +207,22 @@ const Home = () => {
             occupancy intelligence with building automation to drive radical sustainability.
           </p>
           <div style={{ display: 'flex', gap: '20px' }}>
-             <div className="glass-panel" style={{ padding: '20px', flex: 1, borderLeft: '3px solid var(--neon-mint)' }}>
-                <h4 style={{ margin: '0 0 8px 0', color: 'var(--neon-mint)' }}>Predictive Efficiency</h4>
-                <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-muted)' }}>Automated occupancy-based HVAC & lighting control.</p>
-             </div>
-             <div className="glass-panel" style={{ padding: '20px', flex: 1, borderLeft: '3px solid var(--neon-blue)' }}>
-                <h4 style={{ margin: '0 0 8px 0', color: 'var(--neon-blue)' }}>Strategic Insights</h4>
-                <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-muted)' }}>Gemini-powered reasoning over schedule and WiFi data.</p>
-             </div>
+             <button className="btn-cyber primary" onClick={() => window.location.href='/dashboard'}>
+               Admin Console <Layout size={18} style={{ marginLeft: '8px' }} />
+             </button>
+             <button className="btn-cyber">
+               Download Flutter App <TrendingUp size={18} style={{ marginLeft: '8px' }} />
+             </button>
           </div>
         </div>
 
         <div style={{ flex: 1, display: 'flex', justifyContent: 'center', minWidth: '320px' }}>
-          <MobileMockup />
+          <div style={{ textAlign: 'center' }}>
+            <MobileMockup />
+            <div className="mono" style={{ marginTop: '20px', fontSize: '12px', color: 'var(--text-muted)' }}>
+              Built with Flutter Cross-Platform Engine
+            </div>
+          </div>
         </div>
       </main>
     </div>
