@@ -210,7 +210,7 @@ const Home = () => {
              <button className="btn-cyber primary" onClick={() => window.location.href='/dashboard'}>
                Admin Console <Layout size={18} style={{ marginLeft: '8px' }} />
              </button>
-             <button className="btn-cyber">
+             <button className="btn-cyber" onClick={() => window.open('https://github.com/batman-is-dark/ECOSYNC/tree/master/mobile', '_blank')}>
                Download Flutter App <TrendingUp size={18} style={{ marginLeft: '8px' }} />
              </button>
           </div>
