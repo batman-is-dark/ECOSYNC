@@ -50,7 +50,7 @@ const Dashboard = () => {
                     const newLog = {
                         id: Date.now(),
                         time: new Date().toLocaleTimeString('en-GB', { hour12: false }),
-                        msg: `Vertex AI: ${data.actual_occupancy > 150 ? 'Optimal load balancing applied.' : 'Predictive throttling enabled.'}`
+                        msg: `ML Engine: ${data.actual_occupancy > 150 ? 'Optimal load balancing applied.' : 'Predictive throttling enabled.'}`
                     };
                     setLogs(prev => [newLog, ...prev].slice(0, 15));
                 }
@@ -169,7 +169,7 @@ const Dashboard = () => {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
                         <div>
                             <h3 style={{ margin: 0, fontSize: '18px' }}>Occupancy Real-time Analysis</h3>
-                            <p style={{ color: 'var(--text-muted)', fontSize: '13px', margin: '4px 0 0 0' }}>Data ingested via WiFi telemetry and Vertex AI models</p>
+                            <p style={{ color: 'var(--text-muted)', fontSize: '13px', margin: '4px 0 0 0' }}>Data ingested via WiFi telemetry and LSTM forecasting models</p>
                         </div>
                         <div className="mono" style={{ fontSize: '13px', display: 'flex', gap: '20px' }}>
                            <span style={{ opacity: 0.5 }}>● PREDICTED</span>
@@ -217,10 +217,10 @@ const Dashboard = () => {
                     </h3>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                         {[
-                            { label: 'BigQuery Data Warehouse', status: 'SYNCED', val: '2.4 GB' },
+                            { label: 'Campus Data Warehouse', status: 'SYNCED', val: '2.4 GB' },
                             { label: 'Edge Inference Latency', status: 'LOW', val: '12ms' },
                             { label: 'Model Accuracy', status: '94%', val: 'LSTM-v4' },
-                            { label: 'Cloud Function Ticks', status: 'IDLE', val: 'OK' }
+                            { label: 'Core processing Ticks', status: 'IDLE', val: 'OK' }
                         ].map((item, i) => (
                             <div key={i} style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '16px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                                 <div>
