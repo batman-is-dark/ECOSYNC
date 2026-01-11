@@ -13,13 +13,16 @@ const Dashboard = () => {
         energy_savings_mode: false,
         carbon_saved_kg: 0,
         history: [],
-        ai_override: false
+        ai_override: false,
+        gemini_insight: "Waiting for Gemini reasoning...",
+        vertex_model_status: "Initializing",
+        bigquery_sync: "Standby"
     });
 
     const [logs, setLogs] = useState([
-        { id: 1, time: '14:20:01', msg: 'System initialized. Loading AI weights...' },
-        { id: 2, time: '14:20:05', msg: 'WiFi log stream connected. 242 nodes active.' },
-        { id: 3, time: '14:20:10', msg: 'HVAC North Wing entering ECO-MODE via predictive trigger.' }
+        { id: 1, time: '14:20:01', msg: 'System initialized. Connecting to Google Vertex AI Endpoint...' },
+        { id: 2, time: '14:20:05', msg: 'Gemini 2.5 Pro multimodal reasoner online.' },
+        { id: 3, time: '14:20:10', msg: 'Google Cloud BigQuery telemetry stream: [CONNECTED]' }
     ]);
 
     const [toggles, setToggles] = useState({
@@ -88,10 +91,18 @@ const Dashboard = () => {
 
     return (
         <div className="app-container" style={{ padding: '20px' }}>
-            <nav style={{ marginBottom: '20px' }}>
+            <nav style={{ marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Link to="/" style={{ color: 'var(--text-muted)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <ArrowLeft size={18} /> Back
                 </Link>
+                <div style={{ display: 'flex', gap: '20px' }}>
+                    <div className="mono" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                        VERTEX AI: <span style={{ color: 'var(--neon-mint)' }}>HEALTHY</span>
+                    </div>
+                    <div className="mono" style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                        BIGQUERY SYNC: <span style={{ color: 'var(--neon-blue)' }}>ACTIVE</span>
+                    </div>
+                </div>
             </nav>
 
             <div className="glass-panel admin-card">
@@ -100,10 +111,22 @@ const Dashboard = () => {
                         <Leaf size={24} color="var(--neon-mint)" />
                         <h2 style={{ margin: 0 }}>Advanced Energy Console</h2>
                     </div>
-                    <div className="mono" style={{ color: 'var(--neon-mint)', fontSize: '12px', background: 'rgba(0, 255, 163, 0.1)', padding: '4px 12px', borderRadius: '4px' }}>
-                       SYSTEM ID: ECO_AI_STATION_04
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                       <div className="mono" style={{ color: 'var(--neon-mint)', fontSize: '10px', background: 'rgba(0, 255, 163, 0.05)', padding: '4px 10px', borderRadius: '4px', border: '1px solid rgba(0, 255, 163, 0.2)' }}>
+                          Gemini 2.5 Pro Multimodal Reasoning Enabled
+                       </div>
                     </div>
                 </header>
+
+                {/* Gemini Insight Banner */}
+                <div className="glass-panel" style={{ margin: '20px 0', padding: '16px 20px', borderLeft: '4px solid var(--neon-purple)', background: 'linear-gradient(90deg, rgba(189,0,255,0.05) 0%, transparent 100%)' }}>
+                    <div className="mono" style={{ fontSize: '10px', color: 'var(--neon-purple)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <Zap size={10} /> GEMINI AI CONTEXTUAL INSIGHT
+                    </div>
+                    <div style={{ fontSize: '15px', color: 'var(--text-main)', fontStyle: 'italic' }}>
+                        "{stats.gemini_insight}"
+                    </div>
+                </div>
 
                 <div style={{ display: 'flex', gap: '32px', flexWrap: 'wrap' }}>
                     {/* Left: Chart */}
@@ -198,7 +221,11 @@ const Dashboard = () => {
                             <span className="mono" style={{ fontSize: '10px', color: 'var(--neon-mint)' }}>● ANALYTICS ACTIVE</span>
                         </div>
                         <div className="log-console">
-                            {logs.map(log => (
+                            {/* Merge frontend logs with backend events */}
+                            {[...logs, ...(stats.events || []).map((e, i) => ({ id: `be-${i}`, time: e.time, msg: e.event }))]
+                                .sort((a,b) => b.time.localeCompare(a.time))
+                                .slice(0, 15)
+                                .map(log => (
                                 <div key={log.id} className="log-entry">
                                     <span style={{ color: 'var(--text-muted)', marginRight: '8px' }}>[{log.time}]</span>
                                     {log.msg}

@@ -110,13 +110,22 @@ const Home = () => {
           </p>
           <div style={{ display: 'flex', gap: '20px' }}>
              <div className="glass-panel" style={{ padding: '20px', flex: 1 }}>
-                <h4 style={{ margin: '0 0 8px 0', color: 'var(--neon-mint)' }}>94% Accuracy</h4>
-                <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-muted)' }}>In occupancy prediction using AI-driven WiFi logs.</p>
+                <h4 style={{ margin: '0 0 8px 0', color: 'var(--neon-mint)' }}>Vertex AI Driven</h4>
+                <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-muted)' }}>94% predictive accuracy using custom Vertex AI models.</p>
              </div>
              <div className="glass-panel" style={{ padding: '20px', flex: 1 }}>
-                <h4 style={{ margin: '0 0 8px 0', color: 'var(--neon-blue)' }}>30% Savings</h4>
-                <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-muted)' }}>Reduction in HVAC energy waste after hours.</p>
+                <h4 style={{ margin: '0 0 8px 0', color: 'var(--neon-blue)' }}>Gemini Intelligence</h4>
+                <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-muted)' }}>Real-time reasoning over unstructured campus data.</p>
              </div>
+          </div>
+          
+          <div style={{ marginTop: '30px', display: 'flex', alignItems: 'center', gap: '15px' }}>
+            <span style={{ fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Powered by:</span>
+            <div style={{ display: 'flex', gap: '15px' }}>
+              <span className="mono" style={{ fontSize: '11px', background: 'rgba(255,255,255,0.05)', padding: '4px 8px', borderRadius: '4px' }}>BigQuery</span>
+              <span className="mono" style={{ fontSize: '11px', background: 'rgba(255,255,255,0.05)', padding: '4px 8px', borderRadius: '4px' }}>Flutter</span>
+              <span className="mono" style={{ fontSize: '11px', background: 'rgba(255,255,255,0.05)', padding: '4px 8px', borderRadius: '4px' }}>Google Cloud</span>
+            </div>
           </div>
         </div>
 

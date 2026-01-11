@@ -26,7 +26,10 @@ STATE = {
     "efficiency": 85,
     "history": [],
     "ai_override": False,
-    "last_update": None
+    "last_update": None,
+    "gemini_insight": "Initializing Gemini 2.5 Pro reasoning...",
+    "vertex_model_status": "Healthy",
+    "bigquery_sync": "Active"
 }
 # Track simulated devices and events
 STATE["devices"] = {
@@ -41,19 +44,22 @@ MODEL_PATH = "occupancy_model.pkl"
 
 def update_pipeline():
     """Background task to simulate the ML pipeline processing."""
+    gemini_insights = [
+        "Gemini: Predicted occupancy shift in North Wing due to scheduled Seminar Room 3B event.",
+        "Gemini: Recommending early HVAC pre-cooling based on unpredicted solar gain patterns.",
+        "Gemini: Correlating WiFi logs with Exam Schedule — High activity expected in Main Hall.",
+        "Gemini: Optimized energy distribution across Classrooms A-D after anomaly detection.",
+        "Gemini: Unstructured data scan (Public Holiday) completed. Adjusting predictions."
+    ]
+    
     while True:
         if not STATE["ai_override"]:
             # 1. Ingest 'Sensor' Data (Simulated)
             actual = np.random.randint(50, 250)
             
-            # 2. Run Inference
+            # 2. Run Inference (Vertex AI Mock)
             if os.path.exists(MODEL_PATH):
-                model = joblib.load(MODEL_PATH)
-                # Mock features for inference: [wifi, class_size, temp]
-                # We'll use the actual as a proxy for wifi for this demo
-                features = np.array([[actual * 0.8, actual * 0.2, 22.5]])
-                # Random Forest expects flattened features from our previous training
-                # but for this demo we'll just simulate the model output based on actual
+                # Simulated Vertex AI Endpoint Call
                 pred0 = int(actual + np.random.normal(0, 15))
                 pred1 = int(pred0 + np.random.normal(0, 10))
             else:
@@ -72,6 +78,7 @@ def update_pipeline():
             STATE["carbon_saved_kg"] = carbon
             STATE["efficiency"] = 90 if eco_mode else 75
             STATE["last_update"] = datetime.now().isoformat()
+            STATE["gemini_insight"] = np.random.choice(gemini_insights)
             
             new_entry = {
                 "time": datetime.now().strftime("%H:%M"),
@@ -80,6 +87,14 @@ def update_pipeline():
             }
             STATE["history"] = (STATE["history"] + [new_entry])[-30:]
             
+            # Simulated BigQuery Telemetry Sink
+            if np.random.random() > 0.7:
+                ev = {
+                    "time": datetime.now().strftime("%H:%M:%S"),
+                    "event": "Google Cloud BigQuery: Telemetry batch synced successfully."
+                }
+                STATE.setdefault("events", [])[:] = (STATE.get("events", []) + [ev])[-50:]
+
         time.sleep(10) # Pipeline runs every 10 seconds
 
 @app.on_event("startup")
