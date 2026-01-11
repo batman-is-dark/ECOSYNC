@@ -6,7 +6,7 @@ import joblib
 import os
 from datetime import datetime, timedelta
 import time
-from reasoning_layer import get_real_gemini_insight
+from .reasoning_layer import get_real_gemini_insight
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -28,8 +28,6 @@ SITE_ACCESS_TOKEN = os.getenv("BACKEND_ACCESS_TOKEN", "ecosync_internal_2026_sec
 def verify_token(x_ecosync_key: str = Header(None)):
     if x_ecosync_key != SITE_ACCESS_TOKEN:
         raise HTTPException(status_code=403, detail="Unauthorized access to EcoSync Intelligence")
-
-@app.on_event("startup")
 
 # Global state (simulating a real-time data store)
 STATE = {
