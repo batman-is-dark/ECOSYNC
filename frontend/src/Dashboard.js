@@ -9,6 +9,8 @@ import {
 import './app.css';
 
 const API_BASE = (process.env.REACT_APP_API_URL && process.env.REACT_APP_API_URL.replace(/"/g, '')) || 'http://localhost:8000/api';
+const AUTH_TOKEN = process.env.REACT_APP_AUTH_TOKEN || 'ecosync_internal_2026_secure';
+const AUTH_HEADER = { 'X-EcoSync-Key': AUTH_TOKEN };
 
 const Dashboard = () => {
     const [stats, setStats] = useState({
@@ -37,10 +39,30 @@ const Dashboard = () => {
     const [aiOverride, setAiOverride] = useState(false);
     const [applyingStrategy, setApplyingStrategy] = useState(false);
 
+    const toggleAiOverride = async () => {
+        const newStatus = !aiOverride;
+        setAiOverride(newStatus);
+        try {
+            await fetch(`${API_BASE}/override?status=${newStatus}`, { 
+                method: 'POST',
+                headers: AUTH_HEADER
+            });
+            setLogs(prev => [{
+                id: Date.now(),
+                time: new Date().toLocaleTimeString('en-GB', { hour12: false }),
+                msg: `SYSTEM: AI Autonomous mode ${newStatus ? 'ENABLED' : 'DISABLED'}`
+            }, ...prev]);
+        } catch (e) {
+            setAiOverride(!newStatus);
+        }
+    };
+
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const res = await fetch(`${API_BASE}/stats`);
+                const res = await fetch(`${API_BASE}/stats`, {
+                    headers: AUTH_HEADER
+                });
                 const data = await res.json();
                 setStats({ ...data, last_sync: new Date().toLocaleTimeString() });
                 if (data.devices) setToggles(data.devices);
@@ -67,7 +89,10 @@ const Dashboard = () => {
         const newStatus = !toggles[device];
         setToggles(prev => ({ ...prev, [device]: newStatus }));
         try {
-            await fetch(`${API_BASE}/device-toggle?device=${device}&status=${newStatus}`, { method: 'POST' });
+            await fetch(`${API_BASE}/device-toggle?device=${device}&status=${newStatus}`, { 
+                method: 'POST',
+                headers: AUTH_HEADER
+            });
             setLogs(prev => [{
                 id: Date.now(),
                 time: new Date().toLocaleTimeString('en-GB', { hour12: false }),
@@ -78,16 +103,24 @@ const Dashboard = () => {
         }
     };
 
-    const handleApplyStrategy = () => {
+    const handleApplyStrategy = async () => {
         setApplyingStrategy(true);
-        setTimeout(() => {
+        try {
+            await fetch(`${API_BASE}/apply-strategy`, {
+                method: 'POST',
+                headers: AUTH_HEADER
+            });
+            setTimeout(() => {
+                setApplyingStrategy(false);
+                setLogs(prev => [{
+                    id: Date.now(),
+                    time: new Date().toLocaleTimeString('en-GB', { hour12: false }),
+                    msg: 'INTELLIGENT_STRATEGY: Gemini recommendations applied to HVAC setpoints.'
+                }, ...prev]);
+            }, 1200);
+        } catch (e) {
             setApplyingStrategy(false);
-            setLogs(prev => [{
-                id: Date.now(),
-                time: new Date().toLocaleTimeString('en-GB', { hour12: false }),
-                msg: 'INTELLIGENT_STRATEGY: Gemini recommendations applied to HVAC setpoints.'
-            }, ...prev]);
-        }, 1200);
+        }
     };
 
     return (
@@ -146,7 +179,7 @@ const Dashboard = () => {
                     </div>
                     <div>
                         <div className="mono" style={{ fontSize: '11px', color: 'var(--neon-purple)', marginBottom: '8px', fontWeight: 800, letterSpacing: '1.5px' }}>
-                            STRATEGIC ADVISOR (GEMINI 2.5 PRO)
+                            STRATEGIC ADVISOR (GEMINI 1.5 FLASH)
                         </div>
                         <div style={{ fontSize: '18px', color: 'var(--text-main)', lineHeight: 1.5, fontWeight: 500, fontStyle: 'italic', maxWidth: '700px' }}>
                              "{stats.gemini_insight}"
@@ -241,7 +274,10 @@ const Dashboard = () => {
                 <div className="glass-panel" style={{ padding: '32px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                         <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 700 }}>Intelligent Controls</h3>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <div 
+                            style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}
+                            onClick={toggleAiOverride}
+                        >
                             <span className="mono" style={{ fontSize: '11px', color: aiOverride ? 'var(--neon-purple)' : 'var(--text-muted)' }}>
                                 {aiOverride ? 'AI_AUTONOMOUS_MODE' : 'MANUAL_INTERVENTION'}
                             </span>
